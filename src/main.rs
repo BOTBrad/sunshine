@@ -1,15 +1,9 @@
+mod board;
+mod hero;
+
 use std::io;
 
-struct Board {
-  width: i32,
-  height: i32,
-}
-
-struct Hero {
-  pos: (i32, i32),
-}
-
-fn view(board: &Board, hero: &Hero) {
+fn view(board: &board::Board, hero: &hero::Hero) {
   let mut wall = String::new();
 
   for _ in 0..(board.width + 2) {
@@ -32,12 +26,12 @@ fn view(board: &Board, hero: &Hero) {
 }
 
 fn main() {
-  let board = Board {
+  let board = board::Board {
     width: 20,
     height: 20,
   };
 
-  let hero = Hero {
+  let hero = hero::Hero {
     pos: (5, 5),
   };
 
