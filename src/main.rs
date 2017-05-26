@@ -8,7 +8,7 @@ struct Hero {
 }
 
 fn view(board: Board, hero: Hero) {
-  let mut wall = "".to_string();
+  let mut wall = String::new();
 
   for _ in 0..(board.width + 2) {
     wall.push('#');
