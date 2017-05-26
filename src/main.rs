@@ -3,10 +3,18 @@ struct Board {
   height: i32,
 }
 
+struct Hero {
+  pos: (i32, i32),
+}
+
 fn main() {
   let board = Board {
     width: 20,
     height: 20,
+  };
+
+  let hero = Hero {
+    pos: (5, 5),
   };
 
   let mut wall = "".to_string();
@@ -16,10 +24,14 @@ fn main() {
   }
 
   println!("{}", wall);
-  for _ in 0..board.height {
+  for y in 0..board.height {
     print!("#");
-    for _ in 0..board.width {
-      print!(" ");
+    for x in 0..board.width {
+      if (x, y) == hero.pos {
+        print!("@");
+      } else {
+        print!(" ");
+      }
     }
     print!("#\n");
   }
