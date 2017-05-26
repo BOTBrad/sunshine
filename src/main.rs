@@ -7,16 +7,7 @@ struct Hero {
   pos: (i32, i32),
 }
 
-fn main() {
-  let board = Board {
-    width: 20,
-    height: 20,
-  };
-
-  let hero = Hero {
-    pos: (5, 5),
-  };
-
+fn view(board: Board, hero: Hero) {
   let mut wall = "".to_string();
 
   for _ in 0..(board.width + 2) {
@@ -36,4 +27,17 @@ fn main() {
     print!("#\n");
   }
   println!("{}", wall);
+}
+
+fn main() {
+  let board = Board {
+    width: 20,
+    height: 20,
+  };
+
+  let hero = Hero {
+    pos: (5, 5),
+  };
+
+  view(board, hero);
 }
