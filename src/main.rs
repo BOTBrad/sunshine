@@ -31,18 +31,24 @@ fn main() {
     height: 20,
   };
 
-  let hero = hero::Hero {
+  let mut hero = hero::Hero {
     pos: (5, 5),
   };
 
   let mut input = String::new();
   loop {
     view(&board, &hero);
+    input.clear();
     io::stdin().read_line(&mut input).expect("stdin failed");
     input.pop(); // remove the '\n' from the end
 
     if input == "exit" {
       break;
+    } else {
+      let dir = hero::to_dir("d", "w", "a", "s", input.as_str());
+      if let Some(d) = dir {
+        hero.walk(d);
+      }
     }
   }
 }
