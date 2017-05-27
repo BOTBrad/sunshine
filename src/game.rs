@@ -1,29 +1,47 @@
 use std::io;
 
+use sdl2;
+
 use board;
 use hero;
 
 pub struct State {
   board: board::Board,
   hero: hero::Hero,
+  canvas: sdl2::render::WindowCanvas,
 }
+
+const DEFAULT_WIDTH: u32 = 20;
+const DEFAULT_HEIGHT: u32 = 20;
 
 impl State {
   pub fn new() -> State {
+    let sdl_context = sdl2::init().unwrap();
+    let video_subsystem = sdl_context.video().unwrap();
+    let window = video_subsystem.window(
+      "rust-sdl2 demo: Video",
+      (DEFAULT_WIDTH + 2) * 10,
+      (DEFAULT_HEIGHT + 2) * 10,
+      ).build()
+      .unwrap();
+
     State {
       board: board::Board {
-        width: 20,
-        height: 20,
+        width: DEFAULT_WIDTH,
+        height: DEFAULT_HEIGHT,
       },
       hero: hero::Hero {
         pos: (5, 5),
       },
+      canvas: window.into_canvas().build().unwrap(),
     }
   }
 
-  pub fn draw(&self) {
+  pub fn draw(&mut self) {
     let board = &self.board;
     let hero = &self.hero;
+
+    // console output
 
     let mut wall = String::new();
     for _ in 0..(board.width + 2) {
@@ -34,7 +52,7 @@ impl State {
     for y in 0..board.height {
       print!("#");
       for x in 0..board.width {
-        if (x, y) == hero.pos {
+        if (x as i32, y as i32) == hero.pos {
           print!("@");
         } else {
           print!(" ");
@@ -43,6 +61,26 @@ impl State {
       print!("#\n");
     }
     println!("{}", wall);
+
+    // sdl2 output
+
+    self.canvas.clear();
+
+    self.canvas.fill_rect(sdl2::rect::Rect::new(0, 0, (board.width+2)*10, 10)).unwrap();
+
+    for y in 0..(board.height as i32) {
+      self.canvas.fill_rect(sdl2::rect::Rect::new(0, (y+1)*10, 10, 10)).unwrap();
+      for x in 0..(board.width as i32) {
+        if (x, y) == hero.pos {
+          self.canvas.fill_rect(sdl2::rect::Rect::new((x+1)*10, (y+1)*10, 10, 10)).unwrap();
+        }
+      }
+      self.canvas.fill_rect(sdl2::rect::Rect::new(((board.width as i32)+1)*10, (y+1)*10, 10, 10)).unwrap();
+    }
+
+    self.canvas.fill_rect(sdl2::rect::Rect::new(0, ((board.height as i32)+1)*10, (board.width+2)*10, 10)).unwrap();
+
+    self.canvas.present();
   }
 
   pub fn update(&mut self) -> bool {
