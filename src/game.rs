@@ -11,27 +11,24 @@ pub struct State {
   canvas: sdl2::render::WindowCanvas,
 }
 
-const DEFAULT_WIDTH: u32 = 20;
-const DEFAULT_HEIGHT: u32 = 20;
-
 impl State {
-  pub fn new() -> State {
+  pub fn new(width: u32, height: u32) -> State {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     let window = video_subsystem.window(
       "rust-sdl2 demo: Video",
-      (DEFAULT_WIDTH + 2) * 10,
-      (DEFAULT_HEIGHT + 2) * 10,
+      (width + 2) * 10,
+      (height + 2) * 10,
       ).build()
       .unwrap();
 
     State {
       board: board::Board {
-        width: DEFAULT_WIDTH,
-        height: DEFAULT_HEIGHT,
+        width: width,
+        height: height,
       },
       hero: hero::Hero {
-        pos: (5, 5),
+        pos: ((width as i32)/2, (height as i32)/2),
       },
       canvas: window.into_canvas().build().unwrap(),
     }
