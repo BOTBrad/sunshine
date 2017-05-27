@@ -1,6 +1,6 @@
 use sdl2;
 
-use graphics;
+use gfx;
 use tile;
 
 pub struct Sdl2Graphics {
@@ -26,7 +26,7 @@ impl Sdl2Graphics {
   }
 }
 
-impl graphics::Graphics for Sdl2Graphics {
+impl gfx::Graphics for Sdl2Graphics {
   fn clear(&mut self) {
     self.canvas.clear();
   }

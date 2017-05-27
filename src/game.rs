@@ -1,7 +1,7 @@
 use std::io;
 
 use board;
-use graphics;
+use gfx;
 use hero;
 use tile;
 
@@ -23,7 +23,7 @@ impl State {
     }
   }
 
-  pub fn draw(&self, gfx: &mut graphics::Graphics) {
+  pub fn draw(&self, gfx: &mut gfx::Graphics) {
     let board = &self.board;
     let hero = &self.hero;
 

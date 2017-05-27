@@ -5,3 +5,4 @@ authors = ["christian w <i@hate.coffee>"]
 
 [dependencies]
 sdl2 = "0.30.0"
+piston = "0.32.0"
