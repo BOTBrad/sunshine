@@ -10,8 +10,9 @@ use piston::input;
 use piston::input::keyboard::Key;
 use piston::window;
 
-mod game;
 mod board;
+mod controller;
+mod game;
 mod hero;
 mod tile;
 
@@ -27,6 +28,7 @@ fn main() {
     .unwrap();
 
   let mut game = game::State::new(WIDTH, HEIGHT, gl_gfx::GlGraphics::new(opengl));
+  let mut controller = controller::Controller::new(Key::W, Key::A, Key::S, Key::D);
 
   let mut events = event_loop::Events::new(event_loop::EventSettings::new())
     .max_fps(60)
