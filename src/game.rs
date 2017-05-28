@@ -1,17 +1,21 @@
 use std::io;
 
+use graphics;
+use opengl_graphics as gl_gfx;
+use piston::input;
+
 use board;
-use gfx;
 use hero;
 use tile;
 
 pub struct State {
   board: board::Board,
   hero: hero::Hero,
+  gl: gl_gfx::GlGraphics,
 }
 
 impl State {
-  pub fn new(width: u32, height: u32) -> State {
+  pub fn new(width: u32, height: u32, gl: gl_gfx::GlGraphics) -> State {
     State {
       board: board::Board {
         width: width,
@@ -20,10 +24,11 @@ impl State {
       hero: hero::Hero {
         pos: ((width as i32)/2, (height as i32)/2),
       },
+      gl: gl,
     }
   }
 
-  pub fn draw(&self, gfx: &mut gfx::Graphics) {
+  pub fn draw(&mut self, args: &input::RenderArgs) {
     let board = &self.board;
     let hero = &self.hero;
 
@@ -50,27 +55,22 @@ impl State {
 
     // gfx output
 
-    gfx.clear();
-
-    for x in 0..(board.width + 2) {
-      gfx.draw(x, 0, tile::Type::Wall);
-      gfx.draw(x, self.board.height + 1, tile::Type::Wall);
-    }
-
-    for y in 0..board.height {
-      gfx.draw(0, y + 1, tile::Type::Wall);
-      gfx.draw(self.board.width + 1, y + 1, tile::Type::Wall);
-      for x in 0..board.width {
-        let t = if (x as i32, y as i32) == hero.pos {
-          tile::Type::Hero
-        } else {
-          tile::Type::Floor
-        };
-        gfx.draw(x + 1, y + 1, t);
+    self.gl.draw(args.viewport(), |c, g| {
+      graphics::clear([0.0, 0.0, 0.0, 1.0], g);
+      for y in 0..board.height {
+        for x in 0..board.width {
+          if (x as i32, y as i32) == hero.pos {
+            graphics::rectangle(
+              [1.0, 1.0, 1.0, 1.0],
+              [(x as f64) * 16.0, (y as f64) * 16.0, 16.0, 16.0],
+              c.transform,
+              g,
+            );
+          }
+        }
       }
-    }
+    });
 
-    gfx.present();
   }
 
   pub fn update(&mut self) -> bool {
