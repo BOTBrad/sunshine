@@ -7,6 +7,7 @@ use glutin_window as gl_window;
 use opengl_graphics as gl_gfx;
 use piston::event_loop::{self, EventLoop};
 use piston::input;
+use piston::input::keyboard::Key;
 use piston::window;
 
 mod game;
@@ -36,11 +37,9 @@ fn main() {
       game.draw(&r);
     },
 
-      input::Input::Update(_) => {
-        let exit = game.update();
-
-        if exit {
-          break;
+      input::Input::Press(input::Button::Keyboard(key)) => {
+        if let Some(dir) = hero::to_dir(Key::D, Key::W, Key::A, Key::S, key) {
+          game.update(dir);
         }
       },
 

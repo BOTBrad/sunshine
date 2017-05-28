@@ -50,19 +50,7 @@ impl State {
 
   }
 
-  pub fn update(&mut self) -> bool {
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("stdin failed");
-    input.pop(); // remove the '\n' from the end
-
-    if input == "exit" {
-      return true;
-    } else {
-      let dir = hero::to_dir("d", "w", "a", "s", input.as_str());
-      if let Some(d) = dir {
-        self.hero.walk(d);
-      }
-    }
-    false
+  pub fn update(&mut self, dir: hero::Dir) {
+    self.hero.walk(dir);
   }
 }
