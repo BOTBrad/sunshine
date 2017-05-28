@@ -1,12 +1,10 @@
-use std::io;
-
 use graphics;
 use opengl_graphics as gl_gfx;
 use piston::input;
 
 use board;
+use controller;
 use hero;
-use tile;
 
 pub struct State {
   board: board::Board,
@@ -44,7 +42,7 @@ impl State {
 
   }
 
-  pub fn update(&mut self, dir: hero::Dir) {
-    self.hero.walk(dir);
+  pub fn update<T: PartialEq>(&mut self, ctl: &controller::Controller<T>) {
+    self.hero.walk(ctl.dpad.flatten());
   }
 }

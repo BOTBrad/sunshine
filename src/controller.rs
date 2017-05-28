@@ -8,6 +8,14 @@ impl<T: PartialEq> Controller<T> {
       dpad: DPad::new(up, left, down, right),
     }
   }
+
+  pub fn down(&mut self, key: &T) {
+    self.dpad.down(key);
+  }
+
+  pub fn up(&mut self, key: &T) {
+    self.dpad.up(key);
+  }
 }
 
 pub struct DPad<T: PartialEq> {
@@ -37,5 +45,12 @@ impl<T: PartialEq> DPad<T> {
         self.state[idx] = false;
       }
     }
+  }
+
+  pub fn flatten(&self) -> (f64, f64) {
+    let lr = (self.state[3] as i8) - (self.state[1] as i8);
+    let ud = (self.state[2] as i8) - (self.state[0] as i8);
+
+    (lr as f64, ud as f64)
   }
 }

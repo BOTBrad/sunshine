@@ -14,7 +14,6 @@ mod board;
 mod controller;
 mod game;
 mod hero;
-mod tile;
 
 const WIDTH: u32 = 20;
 const HEIGHT: u32 = 20;
@@ -40,9 +39,15 @@ fn main() {
     },
 
       input::Input::Press(input::Button::Keyboard(key)) => {
-        if let Some(dir) = hero::to_dir(Key::D, Key::W, Key::A, Key::S, key) {
-          game.update(dir);
-        }
+        controller.down(&key);
+      },
+
+      input::Input::Release(input::Button::Keyboard(key)) => {
+        controller.up(&key);
+      },
+
+      input::Input::Update(_) => {
+        game.update(&controller);
       },
 
       input::Input::Close(_) => {
