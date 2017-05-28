@@ -32,29 +32,6 @@ impl State {
     let board = &self.board;
     let hero = &self.hero;
 
-    // console output
-
-    let mut wall = String::new();
-    for _ in 0..(board.width + 2) {
-      wall.push('#');
-    }
-
-    println!("{}", wall);
-    for y in 0..board.height {
-      print!("#");
-      for x in 0..board.width {
-        if (x as i32, y as i32) == hero.pos {
-          print!("@");
-        } else {
-          print!(" ");
-        }
-      }
-      print!("#\n");
-    }
-    println!("{}", wall);
-
-    // gfx output
-
     self.gl.draw(args.viewport(), |c, g| {
       graphics::clear([0.0, 0.0, 0.0, 1.0], g);
       for y in 0..board.height {
