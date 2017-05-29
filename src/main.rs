@@ -17,8 +17,8 @@ mod hero;
 mod logic;
 mod world;
 
-const WIDTH: u32 = 640;
-const HEIGHT: u32 = 480;
+const WIDTH: u32 = 20 * 16;
+const HEIGHT: u32 = 20 * 16;
 
 fn main() {
   let opengl = gl_gfx::OpenGL::V3_2;
