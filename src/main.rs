@@ -10,23 +10,22 @@ use piston::input;
 use piston::input::keyboard::Key;
 use piston::window;
 
-mod board;
+mod assets;
 mod controller;
 mod game;
 mod hero;
 
-const WIDTH: u32 = 20;
-const HEIGHT: u32 = 20;
-const TILE_SIZE: u32 = 16;
+const WIDTH: u32 = 640;
+const HEIGHT: u32 = 480;
 
 fn main() {
   let opengl = gl_gfx::OpenGL::V3_2;
-  let mut window: gl_window::GlutinWindow = window::WindowSettings::new("sunshine", [WIDTH*TILE_SIZE, HEIGHT*TILE_SIZE])
+  let mut window: gl_window::GlutinWindow = window::WindowSettings::new("sunshine", [WIDTH, HEIGHT])
     .opengl(opengl)
     .build()
     .unwrap();
 
-  let mut game = game::State::new(WIDTH, HEIGHT, gl_gfx::GlGraphics::new(opengl));
+  let mut game = game::State::new(gl_gfx::GlGraphics::new(opengl));
   let mut controller = controller::Controller::new(Key::W, Key::A, Key::S, Key::D);
 
   let mut events = event_loop::Events::new(event_loop::EventSettings::new())
