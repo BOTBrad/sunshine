@@ -51,6 +51,15 @@ impl<T: PartialEq> DPad<T> {
     let lr = (self.state[3] as i8) - (self.state[1] as i8);
     let ud = (self.state[2] as i8) - (self.state[0] as i8);
 
-    (lr as f64, ud as f64)
+    let x = lr as f64;
+    let y = ud as f64;
+
+    let z = if lr == 0 && ud == 0 {
+      1.0
+    } else {
+      (x.powi(2) + y.powi(2)).sqrt()
+    };
+
+    (x / z, y / z)
   }
 }

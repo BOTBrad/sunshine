@@ -1,5 +1,3 @@
-use std::path::Path;
-
 use graphics;
 use opengl_graphics as gl_gfx;
 use piston::input;

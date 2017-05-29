@@ -2,7 +2,7 @@ pub struct Hero {
   pub pos: (f64, f64),
 }
 
-const SPEED: f64 = 1.0/8.0;
+const SPEED: f64 = 1.0/16.0;
 
 impl Hero {
   pub fn walk(&mut self, dir: (f64, f64)) {
