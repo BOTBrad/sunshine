@@ -14,6 +14,7 @@ mod assets;
 mod controller;
 mod game;
 mod hero;
+mod world;
 
 const WIDTH: u32 = 640;
 const HEIGHT: u32 = 480;
