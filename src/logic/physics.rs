@@ -1,12 +1,15 @@
-pub fn collide(hurt: HitBox, target: HitBox) -> Option<ForceVector> {
-  let h_x = hurt[0];
-  let h_y = hurt[1];
-  let h_w = hurt[2];
-  let h_h = hurt[3];
-  let t_x = target[0];
-  let t_y = target[1];
-  let t_w = target[2];
-  let t_h = target[3];
+pub fn collide(hurt: &Collidable, target: &Collidable) -> Option<ForceVector> {
+  let h_box = hurt.hitbox();
+  let t_box = target.hitbox();
+
+  let h_x = h_box[0];
+  let h_y = h_box[1];
+  let h_w = h_box[2];
+  let h_h = h_box[3];
+  let t_x = t_box[0];
+  let t_y = t_box[1];
+  let t_w = t_box[2];
+  let t_h = t_box[3];
 
   // get horizontal overlap
   let x = if h_x + h_w > t_x + t_w {
@@ -32,6 +35,15 @@ pub fn collide(hurt: HitBox, target: HitBox) -> Option<ForceVector> {
   }
 }
 
+pub trait Collidable {
+  fn hitbox(&self) -> HitBox;
+}
 
 pub type HitBox = [f64; 4];
 pub type ForceVector = [f64; 2];
+
+impl Collidable for HitBox {
+  fn hitbox(&self) -> HitBox {
+    *self
+  }
+}

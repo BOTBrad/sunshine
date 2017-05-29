@@ -83,7 +83,6 @@ impl State {
   pub fn update<T: PartialEq>(&mut self, ctl: &controller::Controller<T>) {
     self.hero.walk(ctl.dpad.flatten());
     let tiles = &self.world.tiles;
-    let hero_box = self.hero.hitbox();
 
     for x in 0..tiles.len() {
       for y in 0..tiles[x].len() {
@@ -91,7 +90,7 @@ impl State {
           continue;
         }
 
-        let push = physics::collide(hero_box, [x as f64, y as f64, 1.0, 1.0]);
+        let push = physics::collide(&self.hero, &[x as f64, y as f64, 1.0, 1.0]);
         if let Some(f) = push {
           self.hero.push(f);
         }

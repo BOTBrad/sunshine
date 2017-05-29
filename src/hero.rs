@@ -17,8 +17,10 @@ impl Hero {
     self.pos[0] += f[0];
     self.pos[1] += f[1];
   }
+}
 
-  pub fn hitbox(&self) -> physics::HitBox {
+impl physics::Collidable for Hero {
+  fn hitbox(&self) -> physics::HitBox {
     [
       self.pos[0] + 0.5 - HBOX_SIZE[0] / 2.0,
       self.pos[1] + 0.5 - HBOX_SIZE[1] / 2.0,
