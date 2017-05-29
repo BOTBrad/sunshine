@@ -42,7 +42,7 @@ impl State {
   pub fn new(gl: gl_gfx::GlGraphics) -> State {
     State {
       hero: hero::Hero {
-        pos: (10.0, 10.0),
+        pos: [10.0, 10.0],
       },
       world: world::World::from_str(20, 20, WORLD_STR),
       gl: gl,
@@ -59,8 +59,6 @@ impl State {
 
     self.gl.draw(args.viewport(), |c, g| {
       graphics::clear([0.0, 0.0, 0.0, 1.0], g);
-      let (x, y) = hero.pos;
-
       for x in 0..world.tiles.len() {
         for y in 0..world.tiles[x].len() {
           match world.tiles[x][y] {
@@ -77,17 +75,16 @@ impl State {
       }
 
       graphics::Image::new()
-        .rect([x * 16.0, y * 16.0, 16.0, 16.0])
+        .rect([hero.pos[0] * 16.0, hero.pos[1] * 16.0, 16.0, 16.0])
         .draw(hero_tex, &graphics::DrawState::default(), c.transform, g);
     });
   }
 
   pub fn update<T: PartialEq>(&mut self, ctl: &controller::Controller<T>) {
     self.hero.walk(ctl.dpad.flatten());
-    let (x, y) = self.hero.pos;
     let tiles = &self.world.tiles;
 
-    let hero_box = [x, y, 1.0, 1.0];
+    let hero_box = [self.hero.pos[0], self.hero.pos[1], 1.0, 1.0];
     for x in 0..tiles.len() {
       for y in 0..tiles[x].len() {
         if let world::Tile::Floor = tiles[x][y] {

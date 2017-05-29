@@ -47,19 +47,16 @@ impl<T: PartialEq> DPad<T> {
     }
   }
 
-  pub fn flatten(&self) -> (f64, f64) {
-    let lr = (self.state[3] as i8) - (self.state[1] as i8);
-    let ud = (self.state[2] as i8) - (self.state[0] as i8);
+  pub fn flatten(&self) -> [f64; 2] {
+    let x = ((self.state[3] as i8) - (self.state[1] as i8)) as f64;
+    let y = ((self.state[2] as i8) - (self.state[0] as i8)) as f64;
 
-    let x = lr as f64;
-    let y = ud as f64;
-
-    let z = if lr == 0 && ud == 0 {
+    let z = if x == 0.0 && y == 0.0 {
       1.0
     } else {
       (x.powi(2) + y.powi(2)).sqrt()
     };
 
-    (x / z, y / z)
+    [x / z, y / z]
   }
 }
