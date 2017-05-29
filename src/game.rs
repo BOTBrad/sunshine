@@ -83,8 +83,8 @@ impl State {
   pub fn update<T: PartialEq>(&mut self, ctl: &controller::Controller<T>) {
     self.hero.walk(ctl.dpad.flatten());
     let tiles = &self.world.tiles;
+    let hero_box = self.hero.hitbox();
 
-    let hero_box = [self.hero.pos[0], self.hero.pos[1], 1.0, 1.0];
     for x in 0..tiles.len() {
       for y in 0..tiles[x].len() {
         if let world::Tile::Floor = tiles[x][y] {
