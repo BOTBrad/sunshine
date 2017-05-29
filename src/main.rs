@@ -14,6 +14,7 @@ mod assets;
 mod controller;
 mod game;
 mod hero;
+mod logic;
 mod world;
 
 const WIDTH: u32 = 640;

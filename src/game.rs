@@ -5,6 +5,7 @@ use piston::input;
 use assets;
 use controller;
 use hero;
+use logic::physics;
 use world;
 
 pub struct State {
@@ -83,5 +84,21 @@ impl State {
 
   pub fn update<T: PartialEq>(&mut self, ctl: &controller::Controller<T>) {
     self.hero.walk(ctl.dpad.flatten());
+    let (x, y) = self.hero.pos;
+    let tiles = &self.world.tiles;
+
+    let hero_box = [x, y, 1.0, 1.0];
+    for x in 0..tiles.len() {
+      for y in 0..tiles[x].len() {
+        if let world::Tile::Floor = tiles[x][y] {
+          continue;
+        }
+
+        let push = physics::collide(hero_box, [x as f64, y as f64, 1.0, 1.0]);
+        if let Some(f) = push {
+          self.hero.push(f);
+        }
+      }
+    }
   }
 }

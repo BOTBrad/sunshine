@@ -1,3 +1,5 @@
+use logic::physics;
+
 pub struct Hero {
   pub pos: (f64, f64),
 }
@@ -13,5 +15,10 @@ impl Hero {
     let v_y = SPEED * (d_y as f64);
 
     self.pos = (x + v_x, y + v_y);
+  }
+
+  pub fn push(&mut self, f: physics::ForceVector) {
+    let (x, y) = self.pos;
+    self.pos = (x + f[0], y + f[1]);
   }
 }
