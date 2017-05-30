@@ -51,13 +51,13 @@ impl State {
     let world = &self.world;
 
     self.gl.draw(args.viewport(), |c, g| {
-      graphics::clear([0.0, 0.0, 0.0, 1.0], g);
+      graphics::clear([1.0, 1.0, 1.0, 1.0], g);
       for x in 0..world.tiles.len() {
         for y in 0..world.tiles[x].len() {
           match world.tiles[x][y] {
             world::Tile::Wall => {
               graphics::rectangle(
-                [1.0, 1.0, 1.0, 1.0],
+                [0.0, 0.0, 0.0, 1.0],
                 [(x as f64) * 16.0, (y as f64) * 16.0, 16.0, 16.0],
                 c.transform, g);
             },
