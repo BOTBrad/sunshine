@@ -1,7 +1,9 @@
 extern crate piston;
 extern crate graphics;
 extern crate glutin_window;
+extern crate image;
 extern crate opengl_graphics;
+extern crate texture;
 
 use glutin_window as gl_window;
 use opengl_graphics as gl_gfx;

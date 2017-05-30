@@ -4,7 +4,6 @@ use graphics;
 use opengl_graphics as gl_gfx;
 use piston::input;
 
-use assets;
 use controller;
 use hero;
 use logic::physics;
@@ -14,8 +13,6 @@ pub struct State {
   hero: hero::Hero,
   world: world::World,
   gl: gl_gfx::GlGraphics,
-
-  hero_tex: gl_gfx::Texture,
 }
 
 const WORLD_STR: &str = "\
@@ -43,21 +40,15 @@ const WORLD_STR: &str = "\
 impl State {
   pub fn new(gl: gl_gfx::GlGraphics) -> State {
     State {
-      hero: hero::Hero {
-        pos: [10.0, 10.0],
-      },
+      hero: hero::Hero::new([10.0, 10.0]),
       world: world::World::from_str(20, 20, WORLD_STR),
       gl: gl,
-
-      hero_tex: gl_gfx::Texture::from_path(assets::path().join("hero.png")).unwrap(),
     }
   }
 
   pub fn draw(&mut self, args: &input::RenderArgs) {
     let hero = &self.hero;
     let world = &self.world;
-    let hero_tex = &self.hero_tex;
-
 
     self.gl.draw(args.viewport(), |c, g| {
       graphics::clear([0.0, 0.0, 0.0, 1.0], g);
@@ -78,7 +69,7 @@ impl State {
 
       graphics::Image::new()
         .rect([hero.pos[0] * 16.0, hero.pos[1] * 16.0, 16.0, 16.0])
-        .draw(hero_tex, &graphics::DrawState::default(), c.transform, g);
+        .draw(hero.tex(), &graphics::DrawState::default(), c.transform, g);
     });
   }
 
