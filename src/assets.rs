@@ -1,5 +1,5 @@
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
-pub fn path() -> &'static Path {
-  Path::new("assets")
+pub fn get(p: &str) -> PathBuf {
+   Path::new("assets").join(p)
 }

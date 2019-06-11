@@ -39,9 +39,23 @@ const WORLD_STR: &str = "\
 
 impl State {
   pub fn new(gl: gl_gfx::GlGraphics) -> State {
+    let world_tiles: Vec<_> = WORLD_STR
+      .split('\n')
+      .enumerate()
+      .flat_map(|(y, x_list)|
+        x_list
+          .chars()
+          .enumerate()
+          .map(move |(x, t)| ((x as i32, y as i32), match t {
+            '#' => world::Tile::Wall,
+            _ => world::Tile::Floor,
+          }))
+      )
+      .collect();
+
     State {
       hero: hero::Hero::new([10.0, 10.0]),
-      world: world::World::from_str(20, 20, WORLD_STR),
+      world: world::World::new(world_tiles),
       gl: gl,
     }
   }
@@ -52,9 +66,9 @@ impl State {
 
     self.gl.draw(args.viewport(), |c, g| {
       graphics::clear([1.0, 1.0, 1.0, 1.0], g);
-      for x in 0..world.tiles.len() {
-        for y in 0..world.tiles[x].len() {
-          match world.tiles[x][y] {
+      for x in 0..20 {
+        for y in 0..20 {
+          match world.get(x, y) {
             world::Tile::Wall => {
               graphics::rectangle(
                 [0.0, 0.0, 0.0, 1.0],
@@ -68,33 +82,24 @@ impl State {
       }
 
       graphics::Image::new()
-        .rect([hero.pos[0] * 16.0, hero.pos[1] * 16.0, 16.0, 16.0])
+        .rect([hero.x() * 16.0, hero.y() * 16.0, 16.0, 16.0])
         .draw(hero.tex(), &graphics::DrawState::default(), c.transform, g);
     });
   }
 
   pub fn update<T: PartialEq>(&mut self, ctl: &controller::Controller<T>) {
     self.hero.walk(ctl.dpad.flatten());
-    let tiles = &self.world.tiles;
+    let world = &self.world;
 
     // figure out the wall status around us
     let mut walls = [[false, false], [false, false]];
-    let x = self.hero.pos[0].floor() as i32;
-    let y = self.hero.pos[1].floor() as i32;
+    let x = self.hero.x().floor() as i32;
+    let y = self.hero.y().floor() as i32;
     for i in 0..2 {
-      if x + i < 0 || x + i >= tiles.len() as i32 {
-        continue;
-      }
-
-      let col = &tiles[(x + i) as usize];
-
       for j in 0..2 {
-        if y + j < 0 || y + j >= col.len() as i32 {
-          continue;
-        }
-
-        if let world::Tile::Wall = col[(y + j) as usize] {
-          walls[i as usize][j as usize] = true;
+        match world.get(x + i, y + j) {
+          world::Tile::Wall => { walls[i as usize][j as usize] = true; }
+          _ => {}
         }
       }
     }

@@ -1,39 +1,36 @@
+use std::collections::HashMap;
 use std::vec::Vec;
 
 pub struct World {
-  pub tiles: Vec<Vec<Tile>>,
+  tiles: HashMap<i32, HashMap<i32, Tile>>,
 }
 
 impl World {
-  pub fn from_str(width: usize, height: usize, data: &str) -> Self {
-    let mut tiles = Vec::with_capacity(width);
-    tiles.resize(width, Vec::with_capacity(height));
-    for v in tiles.iter_mut() {
-      v.resize(height, Tile::Floor);
-    }
+  pub fn new(tiles: Vec<((i32, i32), Tile)>) -> Self {
+    let mut tile_map: HashMap<i32, HashMap<i32, Tile>> = HashMap::new();
 
-    let mut i = 0;
-    for c in data.chars() {
-      if i >= width * height {
-        break;
+    for ((x, y), tile) in tiles {
+      if tile_map.contains_key(&x) {
+          tile_map.get_mut(&x).unwrap().insert(y, tile);
+      } else {
+        tile_map.insert(x, [(y, tile)].iter().cloned().collect());
       }
-
-      match c {
-        '#' => tiles[i%width][i/width] = Tile::Wall,
-        ' ' => tiles[i%width][i/width] = Tile::Floor,
-        _ => i -= 1,
-      }
-
-      i += 1;
     }
 
     World {
-      tiles: tiles,
+      tiles: tile_map,
+    }
+  }
+
+  pub fn get(&self, x: i32, y: i32) -> Tile {
+    match self.tiles.get(&x).and_then(|y_map| y_map.get(&y)) {
+      Some(tile) => *tile,
+      None => Tile::Floor,
     }
   }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Copy, Debug)]
 pub enum Tile {
   Wall,
   Floor,

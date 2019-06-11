@@ -6,8 +6,8 @@ use assets;
 use logic::physics;
 
 pub struct Hero {
-  pub pos: [f64; 2],
-  pub facing: Facing,
+  pos: [f64; 2],
+  facing: Facing,
 
   textures: [gl_gfx::Texture; 4],
 }
@@ -17,7 +17,7 @@ const HBOX_SIZE: [f64; 2] = [0.75, 0.9];
 
 impl Hero {
   pub fn new(pos: [f64; 2]) -> Self {
-    let east_dimg = image::open(assets::path().join("hero/east.png")).unwrap();
+    let east_dimg = image::open(assets::get("hero/east.png")).unwrap();
     let east_img = east_dimg.to_rgba();
     let west_img = east_dimg.clone().fliph().to_rgba();
 
@@ -26,9 +26,9 @@ impl Hero {
       pos: pos,
       facing: Facing::South,
       textures: [
-        gl_gfx::Texture::from_path(assets::path().join("hero/north.png")).unwrap(),
+        gl_gfx::Texture::from_path(assets::get("hero/north.png")).unwrap(),
         gl_gfx::Texture::from_image(&west_img, &TextureSettings::new()),
-        gl_gfx::Texture::from_path(assets::path().join("hero/south.png")).unwrap(),
+        gl_gfx::Texture::from_path(assets::get("hero/south.png")).unwrap(),
         gl_gfx::Texture::from_image(&east_img, &TextureSettings::new()),
       ],
     }
@@ -56,6 +56,9 @@ impl Hero {
       Facing::East => &self.textures[3],
     }
   }
+
+  pub fn x(&self) -> f64 { self.pos[0] }
+  pub fn y(&self) -> f64 { self.pos[1] }
 }
 
 impl physics::Collidable for Hero {
