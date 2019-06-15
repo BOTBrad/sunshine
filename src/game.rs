@@ -39,7 +39,7 @@ const WORLD_STR: &str = "\
 
 impl State {
   pub fn new(gl: gl_gfx::GlGraphics) -> State {
-    let world_tiles: Vec<_> = WORLD_STR
+    let world = WORLD_STR
       .split('\n')
       .enumerate()
       .flat_map(|(y, x_list)|
@@ -51,11 +51,11 @@ impl State {
             _ => world::Tile::Floor,
           }))
       )
-      .collect();
+      .fold(world::World::new(), |mut w, (coords, tile)| {w.add(coords, tile); w});
 
     State {
       hero: hero::Hero::new([10.0, 10.0]),
-      world: world::World::new(world_tiles),
+      world: world,
       gl: gl,
     }
   }
@@ -63,6 +63,9 @@ impl State {
   pub fn draw(&mut self, args: &input::RenderArgs) {
     let hero = &self.hero;
     let world = &self.world;
+
+    let x_offset = hero.x() - 10.0;
+    let y_offset = hero.y() - 10.0;
 
     self.gl.draw(args.viewport(), |c, g| {
       graphics::clear([1.0, 1.0, 1.0, 1.0], g);
@@ -72,7 +75,7 @@ impl State {
             world::Tile::Wall => {
               graphics::rectangle(
                 [0.0, 0.0, 0.0, 1.0],
-                [(x as f64) * 16.0, (y as f64) * 16.0, 16.0, 16.0],
+                [(x as f64 - x_offset) * 16.0, (y as f64 - y_offset) * 16.0, 16.0, 16.0],
                 c.transform, g);
             },
 
@@ -82,7 +85,7 @@ impl State {
       }
 
       graphics::Image::new()
-        .rect([hero.x() * 16.0, hero.y() * 16.0, 16.0, 16.0])
+        .rect([10.0 * 16.0, 10.0 * 16.0, 16.0, 16.0])
         .draw(hero.tex(), &graphics::DrawState::default(), c.transform, g);
     });
   }
