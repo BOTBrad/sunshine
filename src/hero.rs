@@ -2,8 +2,8 @@ use image;
 use opengl_graphics as gl_gfx;
 use texture::TextureSettings;
 
-use assets;
-use logic::physics;
+use crate::assets;
+use crate::logic::physics;
 
 pub struct Hero {
   pos: [f64; 2],

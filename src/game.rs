@@ -4,10 +4,10 @@ use graphics;
 use opengl_graphics as gl_gfx;
 use piston::input;
 
-use controller;
-use hero;
-use logic::physics;
-use world;
+use crate::controller;
+use crate::hero;
+use crate::logic::physics;
+use crate::world;
 
 pub struct State {
   hero: hero::Hero,

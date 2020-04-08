@@ -1,4 +1,4 @@
-pub fn collide(hurt: &Collidable, target: &Collidable) -> Option<ForceVector> {
+pub fn collide(hurt: &dyn Collidable, target: &dyn Collidable) -> Option<ForceVector> {
   let h_box = hurt.hitbox();
   let t_box = target.hitbox();
 

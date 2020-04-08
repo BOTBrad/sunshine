@@ -2,6 +2,7 @@
 name = "sunshine"
 version = "0.1.0"
 authors = ["christian w <i@hate.coffee>"]
+edition = "2018"
 
 [dependencies]
 image = "0.13.0"
